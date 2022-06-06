@@ -3,7 +3,7 @@
 
 # dipple: deep but simple to build..
 
-[![License](https://img.shields.io/badge/license-MIT-green)](https://github.com/wallik2/dipple/blob/main/LICENSE) [![Git](https://img.shields.io/github/forks/wallik2/dipple)](https://github.com/wallik2/dipple) [![Discord](https://img.shields.io/discord/911220061287616594)](https://discord.gg/XS8Znh7HPs)
+[![open in colab](https://colab.research.google.com/drive/10sAWJLvfVhRlqUv6rcrtGPzZLcG_qce4?usp=sharing)](https://colab.research.google.com/github/wallik2/PoissonProcess/blob/master/Poisson_process.ipynb)[![License](https://img.shields.io/badge/license-MIT-green)](https://github.com/wallik2/dipple/blob/main/LICENSE) [![Git](https://img.shields.io/github/forks/wallik2/dipple)](https://github.com/wallik2/dipple) [![Discord](https://img.shields.io/discord/911220061287616594)](https://discord.gg/XS8Znh7HPs) 
 
 ## what is it?
 <b>Dipple</b> is a Python package which mainly provide a simple way to build neural network architecture. This package is very useful for a Data scientist beginner who aim to build Logistic, Shallow, or Deep L-layer Neural network with a few line of codes only
