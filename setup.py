@@ -5,10 +5,10 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name='walliktest',
+    name='dipple',
     version='0.0.1',
     description='All of the neural network architecture, with a simple implementation',
-    packages =['deepsus'],
+    packages =['dipple'],
     license='MIT',
     extras_require={
         "dev": [
@@ -30,5 +30,5 @@ setup(
     long_description_content_type="text/markdown",
     author="Saran Pannasuriyaporn",
     author_email="runpan4work@gmail.com",
-    url="https://github.com/wallik2/deepsus"
+    url="https://github.com/wallik2/dipple"
 )
