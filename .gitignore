@@ -3,3 +3,5 @@ main.py
 churn_small3.csv
 __pycache__
 tempCodeRunnerFile.python
+dipple.egg-info
+/dist/
