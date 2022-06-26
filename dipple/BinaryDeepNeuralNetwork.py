@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from time import time
+from copy import deepcopy
 
 from nn_utils import sigmoid,  tanh , ReLU, LeakyReLU
 from nn_utils import dsigmoid, dTanh, dReLU, dLeakyReLU
@@ -49,13 +50,6 @@ def predict_dec(param, X):
     predictions = (a3>0.5)
     return predictions
 
-
-# ---
-
-# In[3]:
-
-
-from copy import deepcopy
 
 def binary_accuracy(X,Y,model,plot = True,**kwargs):
     """Retrieve the Pandas dataframe of X and Y 
