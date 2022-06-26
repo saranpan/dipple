@@ -5,10 +5,10 @@ import seaborn as sns
 from time import time
 from copy import deepcopy
 
-from nn_utils import sigmoid,  tanh , ReLU, LeakyReLU
-from nn_utils import dsigmoid, dTanh, dReLU, dLeakyReLU
-from nn_utils import binary_cross_entropy, update_param, cut_off_threshold
-from general_util import dictionary_to_vector, vector_to_dictionary, gradients_to_vector
+from dipple.nn_utils import sigmoid,  tanh , ReLU, LeakyReLU
+from dipple.nn_utils import dsigmoid, dTanh, dReLU, dLeakyReLU
+from dipple.nn_utils import binary_cross_entropy, update_param, cut_off_threshold
+from dipple.general_util import dictionary_to_vector, vector_to_dictionary, gradients_to_vector
 
 
 # In[2]:
