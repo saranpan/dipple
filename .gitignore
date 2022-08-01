@@ -1,8 +1,7 @@
-main.py
 .ipynb_checkpoints
 churn_small3.csv
 __pycache__
 tempCodeRunnerFile.python
 dipple.egg-info
-/dist/
+dist
 main.ipynb
