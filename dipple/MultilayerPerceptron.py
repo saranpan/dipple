@@ -6,7 +6,7 @@
 from time import time
 import math
 from copy import deepcopy
-from dipple.initializer import *
+from .initializer import *
 from .activation import * 
 from .loss import *
 from .load import *
