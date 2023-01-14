@@ -1,46 +1,61 @@
-# Still rely on L_model_forward
+#!/usr/bin/env python
+# coding: utf-8
 
+# # Interpretation
+# 
+# - `plot_decision_boundary`
+# - `predict_dec`
+
+# In[1]:
+
+
+#import import_ipynb
+
+
+# In[4]:
+
+
+from .utils.py_util import pd_to_np
+
+# %% External module
 import numpy as np
 import matplotlib.pyplot as plt
 
-def plot_decision_boundary(model, X, y): #**model depends from MultilayerPerceptron.py
-    # Set min and max values and give it some padding
-    x_min, x_max = X[0, :].min() - 1, X[0, :].max() + 1  #Intrapolation
-    y_min, y_max = X[1, :].min() - 1, X[1, :].max() + 1
-    h = 0.01
-    # Generate a grid of points with distance h between them
-    xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
-    # Predict the function value for the whole grid
-    Z = model(np.c_[xx.ravel(), yy.ravel()])
-    Z = Z.reshape(xx.shape)
-    # Plot the contour and training examples
-    plt.contourf(xx, yy, Z, cmap=plt.cm.Spectral)
-    plt.ylabel('x2')
-    plt.xlabel('x1')
+
+# In[5]:
+
+
+@pd_to_np                                     # Turn all pandas object argument into numpy.array object
+def plot_decision_boundary_2D(model, X, y, threshold = 0.5):
+    """
+    Plot decision boundary for two features, show slicing map of response variable
+    
+    Argument:
+    model : model object which have method predict 
+    X : Features as numpy object with dimension (m*2)
+    y : response as numpy object with dimension (m*1)
+    
+    """
+    
+    assert X.shape[1] == 2
+    assert X.shape[0] == y.shape[0]
+    
+    X, y = X.T, y.T
+    
+    x1_min, x1_max = (X[0, :].min() - 1, X[0, :].max() + 1)  
+    x2_min, x2_max = (X[1, :].min() - 1, X[1, :].max() + 1)
+    
+    h = 0.01 
+    X1, X2 = np.meshgrid(np.arange(x1_min, x1_max, h), np.arange(x2_min, x2_max, h))   #Cartesian matching af set X1, X2 ; lower h, more smoother 
+    
+
+    Z = model.predict(np.c_[X1.ravel(), X2.ravel()], threshold, predict_proba = False) 
+    Z = Z.reshape(X1.shape)
+
+    plt.contourf(X1, X2, Z, cmap=plt.cm.Spectral)
+    plt.xlabel('X1')
+    plt.ylabel('X2')
+    
     plt.scatter(X[0, :], X[1, :], c=y, cmap=plt.cm.Spectral)
     plt.show()
-    
-    
-def predict_dec(model , X):
-    """
-    Used for plotting decision boundary.
-    
-    Arguments:
-    model -- expecting model to contain parameter and its activation function 
-             where python dictionary containing your param 
-    X -- input data of size (m, K)
-    
-    Returns
-    predictions -- vector of predictions of our model (red: 0 / blue: 1)
-    """
-    
-    # Predict using forward propagation and a classification threshold of 0.5
-    #param = model.param
-    #forward_activation_function = model.forward_activation_function
-    #last_forward_activation_function = model.last_forward_activation_function
-    
-    #a3, cache = L_model_forward(X, param , forward_activation_function, last_forward_activation_function)
-    A, cache = model.predict(X,threshold=0.5)
-    #predictions = (a3 >0.5 ) #Default as 0.5 
-    
-    return predictions
+

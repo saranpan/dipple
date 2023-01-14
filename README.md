@@ -1,14 +1,16 @@
 
-![Logo](https://github.com/wallik2/dipple/blob/main/logo.jpg?raw=true)
+![Logo](https://raw.githubusercontent.com/saranpan/dipple/main/logo.jpg)
 
 # dipple: deep but simple to build..
 
-[![open in colab](https://camo.githubusercontent.com/52feade06f2fecbf006889a904d221e6a730c194/68747470733a2f2f636f6c61622e72657365617263682e676f6f676c652e636f6d2f6173736574732f636f6c61622d62616467652e737667)](https://colab.research.google.com/drive/10sAWJLvfVhRlqUv6rcrtGPzZLcG_qce4?usp=sharing) [![License](https://img.shields.io/badge/license-MIT-green)](https://github.com/wallik2/dipple/blob/main/LICENSE) [![Git](https://img.shields.io/github/forks/wallik2/dipple)](https://github.com/wallik2/dipple) [![Discord](https://img.shields.io/discord/911220061287616594)](https://discord.gg/XS8Znh7HPs) 
+[![open in colab](https://camo.githubusercontent.com/52feade06f2fecbf006889a904d221e6a730c194/68747470733a2f2f636f6c61622e72657365617263682e676f6f676c652e636f6d2f6173736574732f636f6c61622d62616467652e737667)](https://colab.research.google.com/drive/1qLPAn6oXnh96rKPn_LrpxPCBxW4rzgJT?usp=sharing) [![License](https://img.shields.io/badge/license-MIT-green)](https://github.com/wallik2/dipple/blob/main/LICENSE) [![Git](https://img.shields.io/github/forks/wallik2/dipple)](https://github.com/saranpan/dipple) [![Discord](https://img.shields.io/discord/911220061287616594)](https://discord.gg/XS8Znh7HPs)
 
 ## what is it?
-<b>Dipple</b> is a Python package which mainly provide a simple way to build neural network architecture. This package is very useful for a Data scientist beginner who aim to build Logistic, Shallow, or Deep L-layer Neural network with a few line of codes only
+<b>Dipple</b> is a Python package that simplifies the process of creating neural network architectures, particularly for beginners in data science. It offers a simple and easy-to-use interface for building Linear, Logistic, Shallow, and Deep L-layer Neural networks using only a few lines of code. 
 
-We turn deep into dip to make it look more simple
+It currently supports Multi-layer Perceptron, with various regularization options such as L2 and Dropout, as well as optimizers and weight initialization techniques to improve training and avoid saddle points. The name "Dipple" is a combination of the words "deep" and "simple", and it reflects the package's goal of making building deep neural networks easy and accessible to beginners.
+
+The project, Dipple, was initiated in 2022 by Saran Pannasuriyaporn as a means of self-study in the field of deep learning. The author chose to learn by writing code from scratch, as a way of gaining a deeper understanding of the concepts. This package is not intended to replace existing libraries such as Tensorflow or Pytorch, but rather to provide an opportunity for aspiring learners to not only learn about deep learning, but also advanced concepts such as object-oriented programming by examining the code samples of Dipple Repository available on [GitHub](https://github.com/saranpan/dipple).
 
 ## Requirement
 Python 3.7 +
@@ -20,117 +22,174 @@ pip install dipple
 
 ## Quick Start
 
+
 #### 1. Import the dataset
 
-```sh
-import pandas as pd
-
-# Import Data
-url = 'https://raw.githubusercontent.com/wallik2/toy_dataset/main/churn_small3.csv'
-df = pd.read_csv(url)
-
-# Split to X,Y
-X = df[['tenure'	,'TotalCharges'	,'PaperlessBilling']]
-Y = df[['Churn']]
-```
+Get started quickly by exploring the Crescent dataset, a popular toy dataset for binary-class classification tasks and a benchmark for machine learning models. With Dipple, loading and using the Crescent dataset is easy and straightforward
 
 ```sh
-display(X.head(3))
+from dipple.import_dataset import Dataset_Library
+
+dlib_borrow = Dataset_Library('crescent') 
+df_train, df_test = dlib_borrow.get_2df()
 ```
-|    | tenure | TotalCharges | PaperlessBilling |
+![output_code](https://i.ibb.co/KWnvCqp/dee.png)
+
+```sh
+# Preview the first 3 rows of train set
+display(df_train.head(3))
+```
+
+|    | x1 | x2 | y |
 | ------ | ------ | ------ | ------ |
-| | 1 | 29.85 | 1 |
-| | 34 | 1889.50 | 0 |
-| | 2 | 108.15 | 1 |
+| 0 | -0.216870 | 1.015449 | 0 |
+| 1 | 0.805050 | -0.557973 | 1 |
+| 2 | 0.711275 | -0.410060 | 1 |
+
+```sh
+#splitting predictor and class
+X_train = df_train[['x1','x2']]
+Y_train = df_train[['y']]
+```
+
+#### 2. Define the Multilayer Perceptron Architecture
+
+If you wish to build a multi-layer perceptron with 2 hidden layers, containing 5 and 2 units respectively, you can define the details in the ```hyperparam_setting``` dictionary. In addition, you can also specify the activation function for both hidden and output layer as relu and sigmoid respectively
+
+```sh
+hyperparam_setting = {
+              "layer_dims" : [2,5,2,1],
+              "hidden_activation_function" : 'relu',
+              "output_activation_function" : 'sigmoid',}   
+```
+
+The Dipple's MLP implementation expects the ```hyperparam_setting``` to have specific keys named "layer_dims", "hidden_activation_function", and "output_activation_function" respectively, in order to define the architecture of the multi-layer perceptron.
+
+The available activation functions for both of hidden and output layers are as the following :
+- ```linear```
+- ```sigmoid```
+- ```tanh```
+- ```relu```
+- ```leakyrelu```
+- ```softmax```
+
+Once choose, you can define the model object by input ```hyperparam_setting``` 
+```sh
+from dipple.mlp import *
+
+model = MultilayerPerceptron.initiate_by_hyperparam_dict(hyperparam_setting)
+```
+
+#### 3. Configuring Gradient Descent
+This step is used to specify the method for updating the parameters via gradient descent.
+
+If you want to set the gradient descent with loss function binary_cross_entropy_loss, learning rate 0.0001, weight initialization as he, regularization as L2 with lambda value of 0.001, and optimizer adam with beta1 = 0.9, beta2 = 0.99, eps = 10e-8, you can use the following code:
 
 
 ```sh
-display(Y.head(3))
+model.compiles(loss='binary_cross_entropy_loss',lr=1e-3,initialization='he',regularization="L2",lambd= 1e-2,optimizer='adam',beta1=0.9,beta2=0.99,eps=10e-8)
 ```
-| | Churn | 
-| ------ | ------ |
-| | 0 |
-| | 0 |
-| | 1 |
 
-#### 2. Construct the neural network architecture and fit
+The details of argument setting for method compile are shown as the following:
+- ```loss``` : ['binary_cross_entropy_loss','cross_entropy_loss']
+- ```learning rate```
+- ```weight initialization techniques``` : ['zero','random','he','xavier']
+- ```regularization``` : ['dropout','L2']
+- ```optimizer``` : : ['momentum','adagrad','rmsprop','adam']
 
-With the version 0.0.1, dipple can only build Neural network architecture with the following simple hyperparameter setting for Binary classification
+Note that if you wish to use dropout instead of L2, the keyword argument ```lambd``` must be replaced by tuple ```keep_prob_sequence```, which indicate the keep probability of a sequence of layer respectively 
 
-- `Number of Layers (L)` ---- The number of hidden and output layers 
-- `A Sequence of the Number of Units (n_unit)` ---- A sequence of number of unit(s) from input layer to output layer
-- `Learning rate (lr)` ---- An initial learning rate which indicated how the parameter Weight and Bias are updated
-- `forward_activation_function` ---- The activation function for forward propagation model (Only ReLU, LeakyReLU, Tanh were available)
-- `backward_activation_function`---- The activation function for backward propagation model (Only ReLU, LeakyReLU, Tanh were available)
+#### 4. Fit Data to our model
+Once the model is configured, we can use it to fit our data using mini-batch gradient descent with a batch size of 32 for 27000 epochs. To track the progress of the model and report the cost function every 1000 epochs. we can use the following code 
 
-dipple implements a sigmoid function as activation function for output layer. In this version, you cannot change it.
-
-
-![Discord](https://i.ibb.co/HDGJbKJ/ss.png)
-
-Let's say we construct the neural network architecture lke the above figure, or Deep `5`-layers Neural networks with the number of unit `8,6,4,2,1` respectively. Both activation functions for forward and backward are `ReLU`, the initial learning rate is `0.00001`
 ```sh
-# Design the Neural network architecture setting
-hyperparam = {"L" : 5,
-              "n_unit" : [3,8,6,4,2,1],
-              "lr" : 1e-5,
-              "forward_activation_function" : 'ReLU',
-              "backward_activation_function" : 'ReLU'}
+model.fit(X_train,Y_train,Epochs=27000,batch_size=32,
+report_cost=True, evry_report_epoch = 1000)
 ```
-
-Once we got the hyperparameter, we can start building by dipple by the following commands. 
 ```sh
-from dipple.BinaryDeepNeuralNetwork import Binary_Deep_L_Layer
-model = Binary_Deep_L_Layer(hyperparam)
-model.fit(X,Y,Epochs=100000)
+Output:
+========
+> Epoch 1000/27000 : ===Cost=== : 0.4433844520553876
+> Epoch 2000/27000 : ===Cost=== : 0.3674708272179111
+> Epoch 3000/27000 : ===Cost=== : 0.34272523427485757
+                            .
+                            .
+                            .
+Epoch 26000/27000 : ===Cost=== : 0.1516102412308588
+Epoch 27000/27000 : ===Cost=== : 0.15146985031429971
 ```
 
-When we run the above command, you will start to get the output like the following.  case. It will tell the cost function for every 1000 epochs until epoch 100000 for this case.
-
-```
-Output : 
-> Epoch 0/100000 : ===Cost=== : 1.3092259528752233
-> Epoch 1000/100000 : ===Cost=== : 1.18264973341166
-> Epoch 2000/100000 : ===Cost=== : 1.0948250491187088
-> Epoch 3000/100000 : ===Cost=== : 1.028352257196818
-> Epoch 4000/100000 : ===Cost=== : 0.975404404481697
-> Epoch 5000/100000 : ===Cost=== : 0.9317897592718797
-> Epoch 6000/100000 : ===Cost=== : 0.8950027214519832
-                          .
-                          .
-                          .
-                          .
-Epoch 98000/100000 : ===Cost=== : 0.5787674005831676
-Epoch 99000/100000 : ===Cost=== : 0.5787628642486251
-```
+![output_code2](https://i.ibb.co/52s9rYh/dee2.png)
 
 
-Once the model was fitted, we could now obtain the updated parameter or weight and bias for each layer by running the following command
+
+Once the model is trained, we can access the updated parameters (weights and biases) for each layer by using the following code:
+
+
 
 ```sh
 model.param
 ```
 
-#### 3. Predict 
-To predict, we have two ways to do it
-1. ```predict_proba``` : Although it's binary classification, the actual output that the model return is probability.
 ```sh
-model.predict_proba(X)
-```
-```
-Output:
-> array([[0.26752663, 0.26704064, 0.26750622, ..., 0.26744317, 0.26745458, 0.26575378]])
+Output
+=======
+{'W1': array([[ 1.66269748,  0.18280045],
+            [ 0.98504132,  1.58239975],
+            [ 1.23171595,  0.07314983],
+            [ 1.56213207,  0.05702136],
+            [-0.39345288,  0.88787371]]),
+        .
+        .
+ 'W3': array([[-0.51395741,  4.60415329]]), 
+ 'b3': array([[-4.84589836]])}
 ```
 
-2. ```predict``` : Unlike predict_proba where it requires threshold to choose the label for it. If the probability is higher than or equal to the threshold, it will be assign as positive label (default threshold is 0.5)
+
+#### 5. Predict 
+The trained model can be used to make predictions using the predict method. There are two options for the output: probability and cut-off value.
+
+If you want the probability, you can directly use the following code:
 
 ```sh
-model.predict(X)
+model.predict(X_train)
 ```
+
+```sh
+Output
+=======
+array([[0.12525224, 0.96623857, 0.96625601, 0.99820462, 0.00779925, ....]])
 ```
-Output:
-> array([[0, 0, 0, ..., 0, 0, 0]])
+However, if you prefer the cut-off value with a threshold of 0.5, you can use the following code:
+
+```sh
+model.predict(X_train, predict_proba=False, threshold=0.5)
 ```
+
+```sh
+Output
+=======
+array([[0, 1, 1, 1, 0, ....]])
+```
+
+It's worth noting that when predict_proba is set to False, the threshold parameter is not required for multi-class classification (with softmax as the output activation function) as the class with the highest probability will be selected automatically.
+
+
+#### 6. Evaluate and Interpret the result
+If there are 2 predictors, it is worth-try to plot 2D decision boundary. In this crescent dataset
+
+```sh
+from dipple.interpret import plot_decision_boundary_2D
+from dipple.metrics import accuracy_score
+
+threshold = 0.5
+
+plot_decision_boundary_2D(model=model,X=X,y=Y,threshold=threshold)
+Y_pred = model.predict(X,threshold = threshold,predict_proba=False)
+print(f'Accuracy on train set : {accuracy_score(Y_pred,Y)}')
+```
+![output_code3](https://i.ibb.co/WpCQXTJ/dee3.png)
+Accuracy on train set : 0.94
 
 ## Dependencies
 our package dipple implements by these packages with the following versions
@@ -148,10 +207,9 @@ our package dipple implements by these packages with the following versions
 - [MIT]
 
 
+
+
+[//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
+
    [MIT]: <https://github.com/wallik2/dipple/blob/main/LICENSE>
 
-## Credit
-
-We are currently looking forward for more contributors to develop the framework for dipple
-
-- Saran Pannasuriyaporn

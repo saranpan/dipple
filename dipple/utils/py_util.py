@@ -1,14 +1,6 @@
+# %% External module
 import numpy as np
 import matplotlib.pyplot as plt
-
-
-"""
-From Coursera
-
-- Python Object Convertor
-"""
-
-# CREDIT : muhammadgaffar
 
 def dictionary_to_vector(parameters):
     """
@@ -80,3 +72,23 @@ def gradients_to_vector(parameters,gradients):
         count = count + 1
 
     return theta
+
+def pd_to_np(any_func):
+    """
+    A Higher-order function
+    Work as Decorator of any function which like to turn every pandas object into numpy
+    
+    """
+
+    import pandas as pd
+    
+    def wrapper_function(*args,**kwargs):
+
+        for key, value in kwargs.items():
+            if isinstance(value,pd.DataFrame):
+                value_ = value.to_numpy()
+                kwargs[key] = value_       #updated from value pandas to numpy
+        
+        return any_func(*args, **kwargs)
+
+    return wrapper_function

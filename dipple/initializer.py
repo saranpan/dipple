@@ -1,25 +1,37 @@
-"""
-Initiate parameter with many various methods
+#!/usr/bin/env python
+# coding: utf-8
 
-    - zeros
-    - random (uniform[0,1) )
-    - xavier (normal(mean=0,var=1/fan_avg))
-    - he (normal(mean=0,var=2/fan_in))
+# # Weight Initialization
+# 
+# - `mlp` updates their parameter from gradient (gradient descent), without initiated parameter, it would say "Gradient of what?"
+# 
+# - The problem of `initialization_zero` for mlp makes all units in every layer got updated by the same gradient, when all units got the same updated then it means it's simply a model with every layer by 1 unit
+# 
+# - `initialization_random` figures out that zero problem, so each unit is uniquely updated but stuck at vanishing/exploding gradient problem
+# - `initialization_xavier` figures out that random problem, appropriate for TanH activation function
+# - `initialization_he` figures out that random problem, appropriate for ReLU and its variant activation function
+# 
+# Both xavier and he does not specify the distribution of parameter, so we planned to get both normal and **uniform (not done)**
 
-In progress
+# In[6]:
 
-"""
 
-################### 
-
+# %% External module
 import numpy as np
 
-################### 
+
+# In[ ]:
 
 
-"""
-Initiate parameter
-"""
+__all__ =   ['initiate_param', 
+             'initialization_zero','initialization_random',
+             'initialization_xavier','initialization_he']
+
+
+# In[2]:
+
+
+# PLAN TO REPLACE AS DECORATOR
 
 def initiate_param(layer_dims:list ,initialization :str = 'random',seed:int = 42) -> list:
     """Initiate the paramaters W, B for each layer
@@ -54,6 +66,8 @@ def initiate_param(layer_dims:list ,initialization :str = 'random',seed:int = 42
     return param
 
 
+# In[3]:
+
 
 def initialization_zero(layer_dims:list):
     """Initialize both weight and bias as zeros
@@ -80,6 +94,10 @@ def initialization_zero(layer_dims:list):
         assert(param['b' + str(l)].shape == (layer_dims[l], 1))
         
     return param
+
+
+# In[4]:
+
 
 def initialization_random(layer_dims:list,scale:int=0.01):
     
@@ -116,6 +134,10 @@ def initialization_random(layer_dims:list,scale:int=0.01):
         
     return param
 
+
+# In[5]:
+
+
 def initialization_xavier(layer_dims:list):
     """
     Initialize weight randomly with Normal(mean=0,sigma=(1/fan_avg))
@@ -147,6 +169,10 @@ def initialization_xavier(layer_dims:list):
         
     return param
 
+
+# In[ ]:
+
+
 def initialization_he(layer_dims:list):
     """
     Initialize weight randomly with Normal(mean=0,sigma=(2/fan_in))
@@ -176,3 +202,4 @@ def initialization_he(layer_dims:list):
         assert(param['b' + str(l)].shape == (layer_dims[l], 1))
         
     return param
+

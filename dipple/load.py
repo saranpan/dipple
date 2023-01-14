@@ -1,14 +1,27 @@
-"""Load dataset into k-batch 
+#!/usr/bin/env python
+# coding: utf-8
 
-In progress:
+# # DataLoader
+# 
+# - For stochastic and mini batch gradient descent
+# - Split and partition the whole dataset into batch dataset (still Pandas dataframe object)
+# 
+
+# In[1]:
 
 
-"""
-################### 
-
+# %% External module
 import pandas as pd
 
-################### 
+
+# In[ ]:
+
+
+__all__ = ['data_loader']
+
+
+# In[ ]:
+
 
 def data_loader(df,batch_size:int,y:str,seed:int=42) -> list:
     """Shuffle & Partition dataframe
@@ -67,3 +80,4 @@ def data_loader(df,batch_size:int,y:str,seed:int=42) -> list:
         mini_batches.append(mini_batch)
     
     return mini_batches
+

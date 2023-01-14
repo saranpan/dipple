@@ -1,49 +1,53 @@
-"""Metrics 
+#!/usr/bin/env python
+# coding: utf-8
 
-In progress:
+# # Metrics
+# 
+# - `accuracy_score`
+
+# In[ ]:
 
 
-"""
+#import import_ipynb
 
-from copy import deepcopy
+
+# In[3]:
+
+
+# %% External module
 import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-from dipple.interpret import plot_decision_boundary,predict_dec
 
-def binary_accuracy(X,Y,model,plot = False,**kwargs): #**model depends from MultilayerPerceptron.py
-    """Retrieve the Pandas dataframe of X and Y 
+
+# In[17]:
+
+
+def accuracy_score(Y,Y_pred):
+    """Evaluate accuracy for the classes
     
     Arguments
     -------------------
-    X --- pd.DataFrame
-            Dataframe of predictors
-    Y --- pd.Series
-            Series of class            
+    Y --- np.array
+          with dimension : (1 or 2)
+            
+    Y_pred --- np.array
+               with dimension : 1
     
     Returns
     ------------------
     accuracy --- float
     """
-    df_X = deepcopy(X)
-    df_Y = deepcopy(Y)
-    length = Y.shape[0]
     
-    Y_pred = model.predict(X.T)
-    Y = Y.values.T
-    
-    array = Y-Y_pred
-    
-    accuracy = np.count_nonzero(array==0) / length
-
-    if plot:
+    if Y.T.shape == Y_pred.shape:
+        Y = Y.T
         
-        if 'title' in kwargs:           # Model with random initialization with Dropout Regularization
-            title = kwargs['title']
-            plt.title(f'{title}\n Accuracy : {accuracy}')
-        
-        axes = plt.gca()
-        plot_decision_boundary(lambda x: predict_dec(model, x.T), df_X.values.T, df_Y.values)
-
-    return accuracy
+    if Y.ndim == 2:
+        Y = np.squeeze(Y) # now Y ndim = 1
+    elif Y_pred.ndim == 2:
+        Y_pred = np.squeeze(Y_pred) # in case, the user swap the position of input between y_pred and y
+    
+    
+    arr = Y == Y_pred
+    arr_ = np.count_nonzero(arr) / len(arr)
+    
+    return arr_
 
