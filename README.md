@@ -91,7 +91,7 @@ model.compiles(loss='binary_cross_entropy_loss',lr=1e-3,initialization='he',regu
 ```
 
 The details of argument setting for method compile are shown as the following:
-- ```loss``` : ['binary_cross_entropy_loss','cross_entropy_loss']
+- ```loss``` : ['binary_cross_entropy_loss','cross_entropy_loss','MSE']
 - ```learning rate```
 - ```weight initialization techniques``` : ['zero','random','he','xavier']
 - ```regularization``` : ['dropout','L2']

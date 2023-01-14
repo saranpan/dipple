@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='dipple',
-    version='0.0.6',
+    version='1.0.2',
     description='All of the neural network architecture, with a simple implementation',
     packages =['dipple','dipple.utils'],
     license='MIT',

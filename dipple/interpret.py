@@ -49,7 +49,7 @@ def plot_decision_boundary_2D(model, X, y, threshold = 0.5):
     X1, X2 = np.meshgrid(np.arange(x1_min, x1_max, h), np.arange(x2_min, x2_max, h))   #Cartesian matching af set X1, X2 ; lower h, more smoother 
     
 
-    Z = model.predict(np.c_[X1.ravel(), X2.ravel()], threshold, predict_proba = False) 
+    Z = model.predict(np.c_[X1.ravel(), X2.ravel()], predict_proba = False,threshold=threshold) 
     Z = Z.reshape(X1.shape)
 
     plt.contourf(X1, X2, Z, cmap=plt.cm.Spectral)
